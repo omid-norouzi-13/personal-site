@@ -49,6 +49,100 @@ setInterval(
 
 
 /* =====================================================
+   CODE TABS - DRAG TO SCROLL
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const tabsContainer =
+            document.querySelector(
+                ".code-tabs"
+            );
+
+
+        if (!tabsContainer) return;
+
+
+        let isDragging = false;
+
+        let startX = 0;
+
+        let scrollLeft = 0;
+
+
+        tabsContainer.addEventListener(
+            "mousedown",
+            function (e) {
+
+                isDragging = true;
+
+                startX =
+                    e.pageX - tabsContainer.offsetLeft;
+
+                scrollLeft =
+                    tabsContainer.scrollLeft;
+
+                tabsContainer.style.cursor =
+                    "grabbing";
+
+            }
+        );
+
+
+        tabsContainer.addEventListener(
+            "mouseleave",
+            function () {
+
+                isDragging = false;
+
+                tabsContainer.style.cursor =
+                    "grab";
+
+            }
+        );
+
+
+        tabsContainer.addEventListener(
+            "mouseup",
+            function () {
+
+                isDragging = false;
+
+                tabsContainer.style.cursor =
+                    "grab";
+
+            }
+        );
+
+
+        tabsContainer.addEventListener(
+            "mousemove",
+            function (e) {
+
+                if (!isDragging) return;
+
+                e.preventDefault();
+
+                const x =
+                    e.pageX - tabsContainer.offsetLeft;
+
+                const walk =
+                    (x - startX) * 1.5;
+
+                tabsContainer.scrollLeft =
+                    scrollLeft - walk;
+
+            }
+        );
+
+
+    }
+);
+
+
+/* =====================================================
    CODE TABS - SWITCHING
 ===================================================== */
 
