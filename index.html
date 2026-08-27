@@ -783,19 +783,19 @@
 
             <div class="code-tabs">
 
-                <div class="code-tab active">
+                <div class="code-tab active" data-tab="about">
                     about.py
                 </div>
 
-                <div class="code-tab">
+                <div class="code-tab" data-tab="skills">
                     skills.json
                 </div>
 
-                <div class="code-tab">
+                <div class="code-tab" data-tab="projects">
                     projects.php
                 </div>
 
-                <div class="code-tab">
+                <div class="code-tab" data-tab="contact">
                     contact.js
                 </div>
 
@@ -813,240 +813,286 @@
             </div>
 
 
-
-            <div class="code-content">
-
-
-                <div class="code-row">
-
-                    <span class="line-number">
-                        1
-                    </span>
-
-                    <span class="code">
-
-                        <span class="keyword">
-                            class
-                        </span>
-
-                        About:
-
-                    </span>
-
-                </div>
-
-
+            <!-- ABOUT TAB CONTENT -->
+            <div class="code-content" data-content="about" style="display: block;">
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        2
-                    </span>
-
-                    <span class="code indent-1">
-
-                        <span class="keyword">
-                            def
-                        </span>
-
-                        __init__(self):
-
-                    </span>
-
+                    <span class="line-number">1</span>
+                    <span class="code"><span class="keyword">class</span> About:</span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        3
-                    </span>
-
-                    <span class="code indent-2">
-
-                        self.name =
-
-                        <span class="string">
-                            'Omid Noroozi'
-                        </span>
-
-                    </span>
-
+                    <span class="line-number">2</span>
+                    <span class="code indent-1"><span class="keyword">def</span> __init__(self):</span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        4
-                    </span>
-
-                    <span class="code indent-2">
-
-                        self.role =
-
-                        <span class="string">
-                            'Developer'
-                        </span>
-
-                    </span>
-
+                    <span class="line-number">3</span>
+                    <span class="code indent-2">self.name = <span class="string">'Omid Noroozi'</span></span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        5
-                    </span>
-
-                    <span class="code indent-2">
-
-                        self.mission =
-
-                        <span class="string">
-                            'Solve problems and build useful products'
-                        </span>
-
-                    </span>
-
+                    <span class="line-number">4</span>
+                    <span class="code indent-2">self.role = <span class="string">'Developer'</span></span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        6
-                    </span>
-
-                    <span class="code">
-                    </span>
-
+                    <span class="line-number">5</span>
+                    <span class="code indent-2">self.mission = <span class="string">'Solve problems and build useful products'</span></span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        7
-                    </span>
-
-                    <span class="code indent-1">
-
-                        <span class="keyword">
-                            def
-                        </span>
-
-                        say_hello(self):
-
-                    </span>
-
+                    <span class="line-number">6</span>
+                    <span class="code"></span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        8
-                    </span>
-
-                    <span class="code indent-2">
-
-                        print(
-
-                        <span class="string">
-                            f"Hello! I'm &#123;self.name&#125; and I love coding."
-                        </span>
-
-                        )
-
-                    </span>
-
+                    <span class="line-number">7</span>
+                    <span class="code indent-1"><span class="keyword">def</span> say_hello(self):</span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        9
-                    </span>
-
-                    <span class="code">
-                    </span>
-
+                    <span class="line-number">8</span>
+                    <span class="code indent-2">print(<span class="string">f"Hello! I'm {self.name} and I love coding."</span>)</span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        10
-                    </span>
-
-                    <span class="code">
-
-                        <span class="keyword">
-                            if
-                        </span>
-
-                        __name__ ==
-
-                        <span class="string">
-                            '__main__'
-                        </span>
-
-                        :
-
-                    </span>
-
+                    <span class="line-number">9</span>
+                    <span class="code"></span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        11
-                    </span>
-
-                    <span class="code indent-1">
-
-                        me = About()
-
-                    </span>
-
+                    <span class="line-number">10</span>
+                    <span class="code"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span>
                 </div>
-
-
 
                 <div class="code-row">
-
-                    <span class="line-number">
-                        12
-                    </span>
-
-                    <span class="code indent-1">
-
-                        me.say_hello()
-
-                    </span>
-
+                    <span class="line-number">11</span>
+                    <span class="code indent-1">me = About()</span>
                 </div>
 
-
-
-                <div class="code-cursor">
-                    &gt;_
+                <div class="code-row">
+                    <span class="line-number">12</span>
+                    <span class="code indent-1">me.say_hello()</span>
                 </div>
 
+                <div class="code-cursor">&gt;_</div>
+            </div>
+
+
+            <!-- SKILLS TAB CONTENT -->
+            <div class="code-content" data-content="skills" style="display: none;">
+
+                <div class="code-row">
+                    <span class="line-number">1</span>
+                    <span class="code">{</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">2</span>
+                    <span class="code indent-1"><span class="string">"developer"</span>: <span class="string">"Omid Noroozi"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">3</span>
+                    <span class="code indent-1"><span class="string">"skills"</span>: {</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">4</span>
+                    <span class="code indent-2"><span class="string">"WordPress"</span>: <span class="keyword">95</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">5</span>
+                    <span class="code indent-2"><span class="string">"PHP"</span>: <span class="keyword">90</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">6</span>
+                    <span class="code indent-2"><span class="string">"Python"</span>: <span class="keyword">80</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">7</span>
+                    <span class="code indent-2"><span class="string">"Django"</span>: <span class="keyword">75</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">8</span>
+                    <span class="code indent-2"><span class="string">"JavaScript"</span>: <span class="keyword">70</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">9</span>
+                    <span class="code indent-2"><span class="string">"MySQL"</span>: <span class="keyword">80</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">10</span>
+                    <span class="code indent-2"><span class="string">"Linux"</span>: <span class="keyword">70</span></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">11</span>
+                    <span class="code indent-1">},</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">12</span>
+                    <span class="code indent-1"><span class="string">"available"</span>: <span class="keyword">true</span></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">13</span>
+                    <span class="code">}</span>
+                </div>
+
+                <div class="code-cursor">&gt;_</div>
+            </div>
+
+
+            <!-- PROJECTS TAB CONTENT -->
+            <div class="code-content" data-content="projects" style="display: none;">
+
+                <div class="code-row">
+                    <span class="line-number">1</span>
+                    <span class="code">&lt;?php</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">2</span>
+                    <span class="code"></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">3</span>
+                    <span class="code indent-1"><span class="keyword">class</span> <span class="string">Projects</span> {</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">4</span>
+                    <span class="code indent-2"><span class="keyword">public</span> <span class="keyword">function</span> getAll() {</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">5</span>
+                    <span class="code indent-2"><span class="keyword">return</span> [</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">6</span>
+                    <span class="code indent-2"><span class="string">"FaraCom System"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">7</span>
+                    <span class="code indent-2"><span class="string">"Shop Management"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">8</span>
+                    <span class="code indent-2"><span class="string">"Django Blog"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">9</span>
+                    <span class="code indent-2"><span class="string">"API Service"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">10</span>
+                    <span class="code indent-2"><span class="string">"Corporate Website"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">11</span>
+                    <span class="code indent-2"><span class="string">"Developer API"</span></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">12</span>
+                    <span class="code indent-2">];</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">13</span>
+                    <span class="code indent-1">}</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">14</span>
+                    <span class="code">}</span>
+                </div>
+
+                <div class="code-cursor">&gt;_</div>
+            </div>
+
+
+            <!-- CONTACT TAB CONTENT -->
+            <div class="code-content" data-content="contact" style="display: none;">
+
+                <div class="code-row">
+                    <span class="line-number">1</span>
+                    <span class="code"><span class="keyword">const</span> contact = {</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">2</span>
+                    <span class="code indent-1">name: <span class="string">"Omid Noroozi"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">3</span>
+                    <span class="code indent-1">role: <span class="string">"Full-Stack Developer"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">4</span>
+                    <span class="code indent-1">github: <span class="string">"@omidnorouzi"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">5</span>
+                    <span class="code indent-1">linkedin: <span class="string">"omid-norouzi"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">6</span>
+                    <span class="code indent-1">email: <span class="string">"omid@example.com"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">7</span>
+                    <span class="code indent-1">telegram: <span class="string">"@omid_dev"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">8</span>
+                    <span class="code indent-1">location: <span class="string">"Iran"</span>,</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">9</span>
+                    <span class="code indent-1">available: <span class="keyword">true</span></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">10</span>
+                    <span class="code">};</span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">11</span>
+                    <span class="code"></span>
+                </div>
+
+                <div class="code-row">
+                    <span class="line-number">12</span>
+                    <span class="code">console.log(<span class="string">"Let's connect!"</span>);</span>
+                </div>
+
+                <div class="code-cursor">&gt;_</div>
             </div>
 
         </section>

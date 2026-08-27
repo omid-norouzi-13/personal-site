@@ -49,6 +49,254 @@ setInterval(
 
 
 /* =====================================================
+   CODE TABS - SWITCHING
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const codePanel =
+            document.querySelector(
+                ".code-panel"
+            );
+
+
+        if (!codePanel) return;
+
+
+        const tabs =
+            codePanel.querySelectorAll(
+                ".code-tab"
+            );
+
+
+        const contents =
+            codePanel.querySelectorAll(
+                ".code-content"
+            );
+
+
+        if (
+            !tabs.length ||
+            !contents.length
+        ) {
+            return;
+        }
+
+
+        /* =================================================
+           SWITCH TAB
+        ================================================= */
+
+        function switchTab(
+            targetTab
+        ) {
+
+            tabs.forEach(
+                function (tab) {
+
+                    tab.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            contents.forEach(
+                function (content) {
+
+                    content.style.display =
+                        "none";
+
+                }
+            );
+
+
+            targetTab.classList.add(
+                "active"
+            );
+
+
+            const tabName =
+                targetTab.getAttribute(
+                    "data-tab"
+                );
+
+
+            const targetContent =
+                codePanel.querySelector(
+                    '[data-content="' +
+                    tabName +
+                    '"]'
+                );
+
+
+            if (
+                targetContent
+            ) {
+
+                /* Re-trigger fade-in animation */
+                targetContent.style.animation = 'none';
+                targetContent.offsetHeight;
+                targetContent.style.animation = '';
+
+                targetContent.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        /* =================================================
+           CLICK EVENTS
+        ================================================= */
+
+        tabs.forEach(
+            function (tab) {
+
+                tab.addEventListener(
+                    "click",
+                    function () {
+
+                        switchTab(
+                            tab
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           TOUCH / SWIPE ON TABS
+        ================================================= */
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+
+        const tabsContainer =
+            codePanel.querySelector(
+                ".code-tabs"
+            );
+
+
+        if (
+            tabsContainer
+        ) {
+
+            tabsContainer.addEventListener(
+                "touchstart",
+                function (event) {
+
+                    touchStartX =
+                        event.changedTouches[0].screenX;
+
+                },
+                {
+                    passive: true
+                }
+            );
+
+
+            tabsContainer.addEventListener(
+                "touchend",
+                function (event) {
+
+                    touchEndX =
+                        event.changedTouches[0].screenX;
+
+
+                    const difference =
+                        touchStartX -
+                        touchEndX;
+
+
+                    if (
+                        Math.abs(difference) > 40
+                    ) {
+
+
+                        let activeIndex = -1;
+
+
+                        tabs.forEach(
+                            function (tab, index) {
+
+                                if (
+                                    tab.classList.contains(
+                                        "active"
+                                    )
+                                ) {
+
+                                    activeIndex =
+                                        index;
+
+                                }
+
+                            }
+                        );
+
+
+                        let newIndex = -1;
+
+
+                        if (
+                            difference > 0
+                        ) {
+
+                            /* Swipe Left - Next Tab */
+                            newIndex =
+                                Math.min(
+                                    activeIndex + 1,
+                                    tabs.length - 1
+                                );
+
+                        } else {
+
+                            /* Swipe Right - Previous Tab */
+                            newIndex =
+                                Math.max(
+                                    activeIndex - 1,
+                                    0
+                                );
+
+                        }
+
+
+                        if (
+                            newIndex !== -1 &&
+                            newIndex !== activeIndex
+                        ) {
+
+                            switchTab(
+                                tabs[newIndex]
+                            );
+
+                        }
+
+                    }
+
+                },
+                {
+                    passive: true
+                }
+            );
+
+        }
+
+
+    }
+);
+
+
+/* =====================================================
    FEATURED PROJECTS SLIDER
 ===================================================== */
 
