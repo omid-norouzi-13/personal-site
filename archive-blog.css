@@ -89,6 +89,68 @@ body {
 
 
 /* =====================================================
+   HAMBURGER MENU
+===================================================== */
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #b18a45;
+    border-radius: 2px;
+    transition: all .3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+    background: #78bd58;
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+    background: #78bd58;
+}
+
+
+/* =====================================================
+   MOBILE OVERLAY
+===================================================== */
+
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 7, 6, 0.95);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.mobile-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+
+/* =====================================================
    HERO SECTION
 ===================================================== */
 
@@ -499,10 +561,42 @@ body {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+
+    .hamburger {
+        display: flex;
+    }
+
+    .window-controls {
+        display: none;
+    }
 
     .nav-links {
-        display: none;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 80px 30px 30px;
+        background: #080b0a;
+        border-left: 1px solid #302d1e;
+        z-index: 1000;
+        transition: right .3s ease;
+        overflow-y: auto;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 14px 0;
+        font-size: 15px;
+        border-bottom: 1px solid #1a1d16;
     }
 
     .post-card {
@@ -548,5 +642,21 @@ body {
 
     .hero-title {
         font-size: 22px;
+    }
+
+    .blog-hero-left {
+        padding: 30px 20px;
+    }
+
+    .filter-box {
+        padding: 12px 15px;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-excerpt {
+        font-size: 14px;
     }
 }
