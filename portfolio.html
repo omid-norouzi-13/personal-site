@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Omid - Developer Portfolio. Featured projects, websites and applications.">
-    <title>Omid.dev — Featured Projects</title>
+    <title>omid norouzi — Featured Projects</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,34 @@
     <link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
+    <!-- ==================================================
+         NAVBAR
+    ================================================== -->
+
+    <nav class="nav">
+        <a href="index.html" class="logo">omid.dev</a>
+        <button class="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="index.html#about">ABOUT</a></li>
+            <li><a href="portfolio.html" class="active">PROJECTS</a></li>
+            <li><a href="index.html#skills">SKILLS</a></li>
+            <li><a href="archive-blog.html">BLOG</a></li>
+            <li><a href="index.html#contact">CONTACT</a></li>
+        </ul>
+        <div class="window-controls">
+            <span>&minus;</span>
+            <span>&square;</span>
+            <span>&times;</span>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay"></div>
 
 <section class="projects-section" id="projects">
 
@@ -43,7 +71,7 @@
                 <div class="project-counter">
                     <span>&gt;</span>
                     total_projects:
-                    <strong>06</strong>
+                    <strong>01</strong>
                 </div>
 
             </div>
@@ -93,7 +121,7 @@
                     </div>
 
                     <span class="project-domain">
-                        faracom.ir
+                        iprocul.ir
                     </span>
 
                     <span class="project-status live">
@@ -114,14 +142,14 @@
                             <span></span>
 
                             <small>
-                                https://faracom.ir
+                                https://iprocul.ir
                             </small>
                         </div>
 
                         <div class="project-image">
                             <img
-                                src="images/pixel-img.png"
-                                alt="FaraCom System website"
+                                src="images/iprocul.jpg"
+                                alt="iProcul — دانشگاه کشاورزی تهران"
                                 loading="lazy"
                             >
                         </div>
@@ -136,27 +164,29 @@
                         </div>
 
                         <h3>
-                            FaraCom System
+                            دانشگاه کشاورزی تهران
                         </h3>
 
                         <span class="project-type">
-                            Corporate Website
+                            خبری / فروشگاهی
                         </span>
 
                         <p>
-                            A professional corporate website
-                            for an engineering and technical
-                            services company.
+                            این پروژه به صورت کامل از صفر تا صد
+                            توسط شخص خودم آنالیز، دیباگ و طراحی
+                            شد. طرح پیاده‌سازی شده توسط دکتر
+                            مجتبی دلشاد ارائه و توسط بنده به
+                            صورت کامل اجرا شد.
                         </p>
 
 
                         <div class="project-tech">
 
                             <span>WordPress</span>
-                            <span>Elementor</span>
+                            <span>WooCommerce</span>
                             <span>PHP</span>
-                            <span>Custom CSS</span>
-                            <span>Performance</span>
+                            <span>Custom Theme</span>
+                            <span>Payment Gateway</span>
 
                         </div>
 
@@ -168,7 +198,7 @@
                 <div class="project-actions">
 
                     <a
-                        href="https://example.com"
+                        href="https://iprocul.ir"
                         class="project-btn primary"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -178,7 +208,7 @@
                     </a>
 
                     <a
-                        href="#"
+                        href="single-portfolio.html"
                         class="project-btn secondary"
                     >
                         CASE STUDY
@@ -190,8 +220,8 @@
             </article>
 
 
-            <!-- Project 02 -->
-            <article class="project-card"
+            <!-- Project 02 — Coming Soon -->
+            <article class="project-card coming-soon"
                      data-category="wordpress">
 
                 <div class="project-window-bar">
@@ -203,12 +233,11 @@
                     </div>
 
                     <span class="project-domain">
-                        shop.faracom.ir
+                        coming-soon
                     </span>
 
-                    <span class="project-status live">
-                        <i></i>
-                        LIVE
+                    <span class="project-status dev">
+                        ◇ COMING SOON
                     </span>
 
                 </div>
@@ -222,18 +251,12 @@
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                https://shop.faracom.ir
-                            </small>
+                            <small>https://coming-soon.ir</small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="assets/images/projects/faracom-shop.webp"
-                                alt="FaraCom Shop website"
-                                loading="lazy"
-                            >
+                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
+                            <!-- <img src="" alt="Coming Soon"> -->
+                            COMING SOON
                         </div>
 
                     </div>
@@ -245,29 +268,16 @@
                             02 / 06
                         </div>
 
-                        <h3>
-                            FaraCom Shop
-                        </h3>
+                        <h3>COMING SOON</h3>
 
                         <span class="project-type">
-                            E-Commerce
+                            Coming Soon
                         </span>
 
-                        <p>
-                            WooCommerce store with custom
-                            features, performance optimization
-                            and modern UX.
-                        </p>
-
+                        <p>COMING SOON</p>
 
                         <div class="project-tech">
-
-                            <span>WordPress</span>
-                            <span>WooCommerce</span>
-                            <span>PHP</span>
-                            <span>JavaScript</span>
-                            <span>ACF</span>
-
+                            <span>—</span>
                         </div>
 
                     </div>
@@ -277,21 +287,13 @@
 
                 <div class="project-actions">
 
-                    <a
-                        href="https://example.com"
-                        class="project-btn primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        VIEW LIVE
+                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>↗</span>
                     </a>
 
-                    <a
-                        href="#"
-                        class="project-btn secondary"
-                    >
-                        CASE STUDY
+                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>→</span>
                     </a>
 
@@ -300,8 +302,8 @@
             </article>
 
 
-            <!-- Project 03 -->
-            <article class="project-card"
+            <!-- Project 03 — Coming Soon -->
+            <article class="project-card coming-soon"
                      data-category="wordpress">
 
                 <div class="project-window-bar">
@@ -313,12 +315,11 @@
                     </div>
 
                     <span class="project-domain">
-                        pars-sepahan.com
+                        coming-soon
                     </span>
 
-                    <span class="project-status live">
-                        <i></i>
-                        LIVE
+                    <span class="project-status dev">
+                        ◇ COMING SOON
                     </span>
 
                 </div>
@@ -332,18 +333,12 @@
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                https://pars-sepahan.com
-                            </small>
+                            <small>https://coming-soon.ir</small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="assets/images/projects/pars-sepahan.webp"
-                                alt="Pars Sepahan website"
-                                loading="lazy"
-                            >
+                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
+                            <!-- <img src="" alt="Coming Soon"> -->
+                            COMING SOON
                         </div>
 
                     </div>
@@ -355,29 +350,16 @@
                             03 / 06
                         </div>
 
-                        <h3>
-                            Pars Sepahan
-                        </h3>
+                        <h3>COMING SOON</h3>
 
                         <span class="project-type">
-                            Industrial Website
+                            Coming Soon
                         </span>
 
-                        <p>
-                            WordPress website for an industrial
-                            group with custom design and
-                            advanced animations.
-                        </p>
-
+                        <p>COMING SOON</p>
 
                         <div class="project-tech">
-
-                            <span>WordPress</span>
-                            <span>Elementor</span>
-                            <span>GSAP</span>
-                            <span>PHP</span>
-                            <span>Animation</span>
-
+                            <span>—</span>
                         </div>
 
                     </div>
@@ -387,21 +369,13 @@
 
                 <div class="project-actions">
 
-                    <a
-                        href="https://example.com"
-                        class="project-btn primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        VIEW LIVE
+                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>↗</span>
                     </a>
 
-                    <a
-                        href="#"
-                        class="project-btn secondary"
-                    >
-                        CASE STUDY
+                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>→</span>
                     </a>
 
@@ -410,8 +384,8 @@
             </article>
 
 
-            <!-- Project 04 -->
-            <article class="project-card"
+            <!-- Project 04 — Coming Soon -->
+            <article class="project-card coming-soon"
                      data-category="webapp">
 
                 <div class="project-window-bar">
@@ -423,11 +397,11 @@
                     </div>
 
                     <span class="project-domain">
-                        task-manager.app
+                        coming-soon
                     </span>
 
-                    <span class="project-status demo">
-                        ◇ DEMO
+                    <span class="project-status dev">
+                        ◇ COMING SOON
                     </span>
 
                 </div>
@@ -441,18 +415,12 @@
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                https://task-manager.app
-                            </small>
+                            <small>https://coming-soon.ir</small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="assets/images/projects/task-manager.webp"
-                                alt="Task Manager application"
-                                loading="lazy"
-                            >
+                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
+                            <!-- <img src="" alt="Coming Soon"> -->
+                            COMING SOON
                         </div>
 
                     </div>
@@ -464,29 +432,16 @@
                             04 / 06
                         </div>
 
-                        <h3>
-                            Task Manager
-                        </h3>
+                        <h3>COMING SOON</h3>
 
                         <span class="project-type">
-                            Web Application
+                            Coming Soon
                         </span>
 
-                        <p>
-                            A lightweight task management
-                            application with dashboard
-                            and analytics.
-                        </p>
-
+                        <p>COMING SOON</p>
 
                         <div class="project-tech">
-
-                            <span>PHP</span>
-                            <span>MySQL</span>
-                            <span>JavaScript</span>
-                            <span>AJAX</span>
-                            <span>Chart.js</span>
-
+                            <span>—</span>
                         </div>
 
                     </div>
@@ -496,22 +451,14 @@
 
                 <div class="project-actions">
 
-                    <a
-                        href="#"
-                        class="project-btn primary"
-                    >
-                        VIEW DEMO
+                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>↗</span>
                     </a>
 
-                    <a
-                        href="#"
-                        class="project-btn secondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        CODE ON GITHUB
-                        <span>↗</span>
+                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
+                        <span>→</span>
                     </a>
 
                 </div>
@@ -519,8 +466,8 @@
             </article>
 
 
-            <!-- Project 05 -->
-            <article class="project-card"
+            <!-- Project 05 — Coming Soon -->
+            <article class="project-card coming-soon"
                      data-category="design">
 
                 <div class="project-window-bar">
@@ -532,11 +479,11 @@
                     </div>
 
                     <span class="project-domain">
-                        portfolio-wp-theme
+                        coming-soon
                     </span>
 
                     <span class="project-status dev">
-                        ◇ DEV
+                        ◇ COMING SOON
                     </span>
 
                 </div>
@@ -550,18 +497,12 @@
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                localhost / portfolio-theme
-                            </small>
+                            <small>https://coming-soon.ir</small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="assets/images/projects/wp-theme.webp"
-                                alt="WordPress theme project"
-                                loading="lazy"
-                            >
+                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
+                            <!-- <img src="" alt="Coming Soon"> -->
+                            COMING SOON
                         </div>
 
                     </div>
@@ -573,28 +514,16 @@
                             05 / 06
                         </div>
 
-                        <h3>
-                            Portfolio WP Theme
-                        </h3>
+                        <h3>COMING SOON</h3>
 
                         <span class="project-type">
-                            WordPress Theme
+                            Coming Soon
                         </span>
 
-                        <p>
-                            A custom WordPress theme designed
-                            for developers and freelancers.
-                        </p>
-
+                        <p>COMING SOON</p>
 
                         <div class="project-tech">
-
-                            <span>WordPress</span>
-                            <span>PHP</span>
-                            <span>SCSS</span>
-                            <span>JavaScript</span>
-                            <span>ACF</span>
-
+                            <span>—</span>
                         </div>
 
                     </div>
@@ -604,22 +533,14 @@
 
                 <div class="project-actions">
 
-                    <a
-                        href="#"
-                        class="project-btn primary"
-                    >
-                        PREVIEW
+                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>↗</span>
                     </a>
 
-                    <a
-                        href="#"
-                        class="project-btn secondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        CODE ON GITHUB
-                        <span>↗</span>
+                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
+                        <span>→</span>
                     </a>
 
                 </div>
@@ -627,8 +548,8 @@
             </article>
 
 
-            <!-- Project 06 -->
-            <article class="project-card"
+            <!-- Project 06 — Coming Soon -->
+            <article class="project-card coming-soon"
                      data-category="plugin">
 
                 <div class="project-window-bar">
@@ -640,11 +561,11 @@
                     </div>
 
                     <span class="project-domain">
-                        f-com-plugin
+                        coming-soon
                     </span>
 
                     <span class="project-status dev">
-                        ◇ DEV
+                        ◇ COMING SOON
                     </span>
 
                 </div>
@@ -658,18 +579,12 @@
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                localhost / wp-admin
-                            </small>
+                            <small>https://coming-soon.ir</small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="assets/images/projects/f-com-plugin.webp"
-                                alt="WordPress plugin project"
-                                loading="lazy"
-                            >
+                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
+                            <!-- <img src="" alt="Coming Soon"> -->
+                            COMING SOON
                         </div>
 
                     </div>
@@ -681,29 +596,16 @@
                             06 / 06
                         </div>
 
-                        <h3>
-                            F-Com Tools
-                        </h3>
+                        <h3>COMING SOON</h3>
 
                         <span class="project-type">
-                            WordPress Plugin
+                            Coming Soon
                         </span>
 
-                        <p>
-                            Custom toolkit plugin for WordPress
-                            with admin tools and optimization
-                            features.
-                        </p>
-
+                        <p>COMING SOON</p>
 
                         <div class="project-tech">
-
-                            <span>WordPress</span>
-                            <span>PHP</span>
-                            <span>JavaScript</span>
-                            <span>Admin Tools</span>
-                            <span>Security</span>
-
+                            <span>—</span>
                         </div>
 
                     </div>
@@ -713,22 +615,14 @@
 
                 <div class="project-actions">
 
-                    <a
-                        href="#"
-                        class="project-btn primary"
-                    >
-                        DETAILS
+                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
                         <span>↗</span>
                     </a>
 
-                    <a
-                        href="#"
-                        class="project-btn secondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        CODE ON GITHUB
-                        <span>↗</span>
+                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
+                        COMING SOON
+                        <span>→</span>
                     </a>
 
                 </div>

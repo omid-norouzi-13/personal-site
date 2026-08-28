@@ -9,7 +9,7 @@
 
     <title>omid norouzi</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="new-css.css">
 
     <script
         src="https://kit.fontawesome.com/4854f4915c.js"
@@ -27,25 +27,30 @@
     ================================================== -->
 
     <nav class="nav">
+        <div class="logo_div">
+            <a href="index.html" class="logo">
+                omid.dev
+            </a>
+        </div>
 
-        <a href="index.html" class="logo">
-            omid.dev
-        </a>
+        <div>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
 
-        <button class="hamburger" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <ul class="nav-links">
-            <li><a href="index.html" class="active">HOME</a></li>
-            <li><a href="index.html#about">ABOUT</a></li>
-            <li><a href="index.html#projects">PROJECTS</a></li>
-            <li><a href="index.html#skills">SKILLS</a></li>
-            <li><a href="archive-blog.html">BLOG</a></li>
-            <li><a href="index.html#contact">CONTACT</a></li>
-        </ul>
+        <div class="menu">
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">HOME</a></li>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="portfolio.html">PROJECTS</a></li>
+                <li><a href="index.html#skills">SKILLS</a></li>
+                <li><a href="archive-blog.html">BLOG</a></li>
+                <li><a href="index.html#contact">CONTACT</a></li>
+            </ul>
+        </div>
 
         <div class="window-controls">
             <span>&minus;</span>
@@ -87,7 +92,7 @@
             </p>
 
 
-            <button class="btn">
+            <button class="btn" type="button" onclick="location.href='portfolio.html';">
                 &gt; view my work
             </button>
 

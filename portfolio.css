@@ -65,6 +65,12 @@ body {
     border-radius: 7px;
 }
 
+.logo_div{
+    width: 33%;
+}
+.menu{
+    width: 33%;
+}
 
 .logo {
 
@@ -724,7 +730,8 @@ body {
 
 
 .window-controls {
-
+    width: 33%;
+    justify-content: right;
     margin-left: auto;
 
     padding: 0 9px;
