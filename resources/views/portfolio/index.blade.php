@@ -41,7 +41,7 @@
                 <div class="project-counter">
                     <span>&gt;</span>
                     total_projects:
-                    <strong>01</strong>
+                    <strong>{{ str_pad((string) $projects->count(), 2, '0', STR_PAD_LEFT) }}</strong>
                 </div>
 
             </div>
@@ -72,532 +72,152 @@
             </div>
 
         </header>
-
-
         <!-- Projects Grid -->
         <div class="projects-grid">
 
+            @forelse ($projects as $project)
+                @php
+                    $technologies = $project->technologies ?? [];
 
-            <!-- Project 01 -->
-            <article class="project-card"
-                     data-category="wordpress">
+                    $lowerTechnologies = collect($technologies)
+                        ->map(fn ($technology) => mb_strtolower((string) $technology));
 
-                <div class="project-window-bar">
+                    if ($lowerTechnologies->contains(
+                        fn ($technology) => str_contains($technology, 'plugin')
+                    )) {
+                        $category = 'plugin';
+                    } elseif ($lowerTechnologies->contains(
+                        fn ($technology) =>
+                            str_contains($technology, 'design') ||
+                            str_contains($technology, 'figma') ||
+                            str_contains($technology, 'ui/ux')
+                    )) {
+                        $category = 'design';
+                    } elseif ($lowerTechnologies->contains(
+                        fn ($technology) =>
+                            str_contains($technology, 'wordpress') ||
+                            str_contains($technology, 'woocommerce')
+                    )) {
+                        $category = 'wordpress';
+                    } else {
+                        $category = 'webapp';
+                    }
 
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                    $projectDomain = $project->project_url
+                        ? (parse_url($project->project_url, PHP_URL_HOST) ?: $project->slug)
+                        : $project->slug;
+                @endphp
 
-                    <span class="project-domain">
-                        iprocul.ir
-                    </span>
+                <article class="project-card"
+                         data-category="{{ $category }}">
 
-                    <span class="project-status live">
-                        <i></i>
-                        LIVE
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
+                    <div class="project-window-bar">
+                        <div class="window-controls">
                             <span></span>
                             <span></span>
                             <span></span>
-
-                            <small>
-                                https://iprocul.ir
-                            </small>
                         </div>
 
-                        <div class="project-image">
-                            <img
-                                src="{{ asset('assets/images/iprocul.jpg') }}"
-                                alt="iProcul — دانشگاه کشاورزی تهران"
-                                loading="lazy"
+                        <span class="project-domain">
+                            {{ $projectDomain }}
+                        </span>
+
+                        <span class="project-status {{ $project->project_url ? 'live' : 'dev' }}">
+                            @if ($project->project_url)
+                                <i></i>
+                                LIVE
+                            @else
+                                ◇ CASE STUDY
+                            @endif
+                        </span>
+                    </div>
+
+                    <div class="project-content">
+                        <div class="project-preview">
+                            <div class="browser-bar">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <small>
+                                    {{ $project->project_url ?: route('portfolio.show', ['slug' => $project->slug]) }}
+                                </small>
+                            </div>
+
+                            <div class="project-image">
+                                @if ($project->featured_image)
+                                    <img
+                                        src="{{ asset('storage/' . ltrim($project->featured_image, '/')) }}"
+                                        alt="{{ $project->title }}"
+                                        loading="lazy"
+                                    >
+                                @else
+                                    <div style="display:flex;align-items:center;justify-content:center;min-height:180px;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;width:100%;">
+                                        NO PREVIEW
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="project-info">
+                            <div class="project-number">
+                                {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                                /
+                                {{ str_pad((string) $projects->count(), 2, '0', STR_PAD_LEFT) }}
+                            </div>
+
+                            <h3>{{ $project->title }}</h3>
+
+                            <span class="project-type">
+                                {{ implode(' / ', array_slice($technologies, 0, 2)) ?: 'PROJECT' }}
+                            </span>
+
+                            <p>
+                                {{ $project->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($project->description ?? ''), 180) }}
+                            </p>
+
+                            <div class="project-tech">
+                                @forelse ($technologies as $technology)
+                                    <span>{{ $technology }}</span>
+                                @empty
+                                    <span>—</span>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-actions">
+                        @if ($project->project_url)
+                            <a
+                                href="{{ $project->project_url }}"
+                                class="project-btn primary"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
-                        </div>
+                                VIEW LIVE
+                                <span>↗</span>
+                            </a>
+                        @endif
 
+                        <a
+                            href="{{ route('portfolio.show', ['slug' => $project->slug]) }}"
+                            class="project-btn secondary"
+                        >
+                            CASE STUDY
+                            <span>→</span>
+                        </a>
                     </div>
 
+                </article>
 
+            @empty
+                <article class="project-card">
                     <div class="project-info">
-
-                        <div class="project-number">
-                            01 / 06
-                        </div>
-
-                        <h3>
-                            دانشگاه کشاورزی تهران
-                        </h3>
-
-                        <span class="project-type">
-                            خبری / فروشگاهی
-                        </span>
-
-                        <p>
-                            این پروژه به صورت کامل از صفر تا صد
-                            توسط شخص خودم آنالیز، دیباگ و طراحی
-                            شد. طرح پیاده‌سازی شده توسط دکتر
-                            مجتبی دلشاد ارائه و توسط بنده به
-                            صورت کامل اجرا شد.
-                        </p>
-
-
-                        <div class="project-tech">
-
-                            <span>WordPress</span>
-                            <span>WooCommerce</span>
-                            <span>PHP</span>
-                            <span>Custom Theme</span>
-                            <span>Payment Gateway</span>
-
-                        </div>
-
+                        <h3>NO PUBLISHED PROJECTS</h3>
+                        <p>There are no published projects yet.</p>
                     </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a
-                        href="https://iprocul.ir"
-                        class="project-btn primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        VIEW LIVE
-                        <span>↗</span>
-                    </a>
-
-                    <a
-                        href="{{ route('portfolio.show', 'iprocul') }}"
-                        class="project-btn secondary"
-                    >
-                        CASE STUDY
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- Project 02 — Coming Soon -->
-            <article class="project-card coming-soon"
-                     data-category="wordpress">
-
-                <div class="project-window-bar">
-
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <span class="project-domain">
-                        coming-soon
-                    </span>
-
-                    <span class="project-status dev">
-                        ◇ COMING SOON
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <small>https://coming-soon.ir</small>
-                        </div>
-
-                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
-                            <!-- <img src="" alt="Coming Soon"> -->
-                            COMING SOON
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-info">
-
-                        <div class="project-number">
-                            02 / 06
-                        </div>
-
-                        <h3>COMING SOON</h3>
-
-                        <span class="project-type">
-                            Coming Soon
-                        </span>
-
-                        <p>COMING SOON</p>
-
-                        <div class="project-tech">
-                            <span>—</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>↗</span>
-                    </a>
-
-                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- Project 03 — Coming Soon -->
-            <article class="project-card coming-soon"
-                     data-category="wordpress">
-
-                <div class="project-window-bar">
-
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <span class="project-domain">
-                        coming-soon
-                    </span>
-
-                    <span class="project-status dev">
-                        ◇ COMING SOON
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <small>https://coming-soon.ir</small>
-                        </div>
-
-                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
-                            <!-- <img src="" alt="Coming Soon"> -->
-                            COMING SOON
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-info">
-
-                        <div class="project-number">
-                            03 / 06
-                        </div>
-
-                        <h3>COMING SOON</h3>
-
-                        <span class="project-type">
-                            Coming Soon
-                        </span>
-
-                        <p>COMING SOON</p>
-
-                        <div class="project-tech">
-                            <span>—</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>↗</span>
-                    </a>
-
-                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- Project 04 — Coming Soon -->
-            <article class="project-card coming-soon"
-                     data-category="webapp">
-
-                <div class="project-window-bar">
-
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <span class="project-domain">
-                        coming-soon
-                    </span>
-
-                    <span class="project-status dev">
-                        ◇ COMING SOON
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <small>https://coming-soon.ir</small>
-                        </div>
-
-                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
-                            <!-- <img src="" alt="Coming Soon"> -->
-                            COMING SOON
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-info">
-
-                        <div class="project-number">
-                            04 / 06
-                        </div>
-
-                        <h3>COMING SOON</h3>
-
-                        <span class="project-type">
-                            Coming Soon
-                        </span>
-
-                        <p>COMING SOON</p>
-
-                        <div class="project-tech">
-                            <span>—</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>↗</span>
-                    </a>
-
-                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- Project 05 — Coming Soon -->
-            <article class="project-card coming-soon"
-                     data-category="design">
-
-                <div class="project-window-bar">
-
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <span class="project-domain">
-                        coming-soon
-                    </span>
-
-                    <span class="project-status dev">
-                        ◇ COMING SOON
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <small>https://coming-soon.ir</small>
-                        </div>
-
-                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
-                            <!-- <img src="" alt="Coming Soon"> -->
-                            COMING SOON
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-info">
-
-                        <div class="project-number">
-                            05 / 06
-                        </div>
-
-                        <h3>COMING SOON</h3>
-
-                        <span class="project-type">
-                            Coming Soon
-                        </span>
-
-                        <p>COMING SOON</p>
-
-                        <div class="project-tech">
-                            <span>—</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>↗</span>
-                    </a>
-
-                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <!-- Project 06 — Coming Soon -->
-            <article class="project-card coming-soon"
-                     data-category="plugin">
-
-                <div class="project-window-bar">
-
-                    <div class="window-controls">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <span class="project-domain">
-                        coming-soon
-                    </span>
-
-                    <span class="project-status dev">
-                        ◇ COMING SOON
-                    </span>
-
-                </div>
-
-
-                <div class="project-content">
-
-                    <div class="project-preview">
-
-                        <div class="browser-bar">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <small>https://coming-soon.ir</small>
-                        </div>
-
-                        <div class="project-image" style="display:flex;align-items:center;justify-content:center;background:#080b0a;color:#3a3520;font-size:12px;letter-spacing:0.05em;">
-                            <!-- <img src="" alt="Coming Soon"> -->
-                            COMING SOON
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-info">
-
-                        <div class="project-number">
-                            06 / 06
-                        </div>
-
-                        <h3>COMING SOON</h3>
-
-                        <span class="project-type">
-                            Coming Soon
-                        </span>
-
-                        <p>COMING SOON</p>
-
-                        <div class="project-tech">
-                            <span>—</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="project-actions">
-
-                    <a href="#" class="project-btn primary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>↗</span>
-                    </a>
-
-                    <a href="#" class="project-btn secondary" style="pointer-events:none;opacity:0.3;">
-                        COMING SOON
-                        <span>→</span>
-                    </a>
-
-                </div>
-
-            </article>
+                </article>
+            @endforelse
 
         </div>
 
