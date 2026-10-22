@@ -33,6 +33,11 @@ class BlogPostsTable
                     ->disk('public')
                     ->square(),
 
+                TextColumn::make('category.name')
+                    ->label('دسته‌بندی')
+                    ->placeholder('بدون دسته‌بندی')
+                    ->sortable(),
+
                 TextColumn::make('status')
                     ->label('وضعیت')
                     ->badge()
@@ -59,7 +64,12 @@ class BlogPostsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
+                SelectFilter::make('category')
+                    ->label('دسته‌بندی')
+                    ->relationship('category', 'name'),
+
                 SelectFilter::make('status')
                     ->label('وضعیت')
                     ->options([

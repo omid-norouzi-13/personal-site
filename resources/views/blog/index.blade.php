@@ -3,6 +3,7 @@
 @section('title', 'Blog Archive | omid.dev')
 
 @push('head')
+    <meta name="description" content="Articles, tutorials and thoughts about web development, WordPress and more.">
     <link rel="stylesheet" href="{{ asset('assets/css/archive-blog.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 @endpush
@@ -28,12 +29,12 @@
 
             <p class="hero-desc">
                 Articles, tutorials and thoughts
-                about Web Development, WordPress,
-                Django, and more.
+                about Web Development, WordPress
+                and more.
             </p>
 
             <p class="hero-total">
-                &gt; total_posts: <span>12</span>
+                &gt; total_posts: <span>{{ $totalPosts }}</span>
             </p>
 
         </div>
@@ -49,13 +50,15 @@
                         // Categories
                     </p>
 
-                    <p class="monitor-item">&gt; All</p>
-                    <p class="monitor-item">&gt; WordPress</p>
-                    <p class="monitor-item">&gt; PHP</p>
-                    <p class="monitor-item">&gt; Python / Django</p>
-                    <p class="monitor-item">&gt; Web Development</p>
-                    <p class="monitor-item">&gt; SEO &amp; Performance</p>
-                    <p class="monitor-item">&gt; Tools &amp; Workflow</p>
+                    <p class="monitor-item">
+                        <a href="{{ route('blog.index') }}">&gt; All</a>
+                    </p>
+
+                    @foreach ($categories as $category)
+                        <p class="monitor-item">
+                            <a href="{{ route('blog.index', ['category' => $category->slug]) }}">&gt; {{ $category->name }}</a>
+                        </p>
+                    @endforeach
 
                 </div>
 
@@ -70,18 +73,21 @@
          FILTER SECTION
     ================================================== -->
 
-    <div class="filter-section">
+    <form class="filter-section" method="GET" action="{{ route('blog.index') }}">
 
         <!-- SEARCH -->
         <div class="filter-box">
-            <label class="filter-label">&gt; Search</label>
+            <label class="filter-label" for="blog-search">&gt; Search</label>
             <div class="search-input-wrap">
                 <input
                     type="text"
+                    id="blog-search"
+                    name="q"
+                    value="{{ $search }}"
                     class="search-input"
                     placeholder="search articles..."
                 >
-                <button class="search-btn">
+                <button class="search-btn" type="submit" aria-label="Search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
@@ -89,19 +95,18 @@
 
         <!-- CATEGORY FILTER -->
         <div class="filter-box">
-            <label class="filter-label">&gt; Filter by Category</label>
-            <select class="filter-select">
-                <option>All Categories</option>
-                <option>WordPress</option>
-                <option>PHP</option>
-                <option>Python / Django</option>
-                <option>Web Development</option>
-                <option>SEO &amp; Performance</option>
-                <option>Tools &amp; Workflow</option>
+            <label class="filter-label" for="blog-category">&gt; Filter by Category</label>
+            <select class="filter-select" id="blog-category" name="category" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->slug }}" @selected($activeCategory === $category->slug)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
             </select>
         </div>
 
-    </div>
+    </form>
 
 
     <!-- ==================================================
@@ -110,152 +115,65 @@
 
     <div class="posts-list">
 
+        @forelse ($posts as $post)
 
-        <!-- POST 01 -->
-        <article class="post-card">
+            <article class="post-card">
 
-            <div class="post-thumb">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&h=200&fit=crop" alt="WordPress">
-            </div>
+                <div class="post-thumb">
+                    @if ($post->image_url)
+                        <img src="{{ $post->image_url }}" alt="{{ $post->title }}" loading="lazy">
+                    @else
+                        <div class="post-thumb-empty">NO IMAGE</div>
+                    @endif
+                </div>
 
-            <div class="post-info">
+                <div class="post-info">
 
-                <p class="post-meta">
-                    May 25, 2024 &nbsp;&bull;&nbsp; WordPress
-                </p>
+                    <p class="post-meta">
+                        {{ $post->display_date->format('M d, Y') }}
+                        @if ($post->category)
+                            &nbsp;&bull;&nbsp; {{ $post->category->name }}
+                        @endif
+                    </p>
 
-                <h2 class="post-title">
-                    How to Build a Fast WordPress
-                    Website in 2024
-                </h2>
+                    <h2 class="post-title">
+                        {{ $post->title }}
+                    </h2>
 
-                <p class="post-excerpt">
-                    Tips and best practices for creating high performance
-                    WordPress websites using modern tools and techniques.
-                </p>
+                    <p class="post-excerpt">
+                        {{ $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 160) }}
+                    </p>
 
-                <a href="{{ route('blog.show', 'how-to-build-a-fast-wordpress-website-in-2024') }}" class="post-link">
-                    &gt; read more
-                </a>
+                    <a href="{{ route('blog.show', $post->slug) }}" class="post-link">
+                        &gt; read more
+                    </a>
 
-            </div>
+                </div>
 
-            <div class="post-readtime">
-                <span class="readtime-num">08</span>
-                <span class="readtime-label">min read</span>
-            </div>
+                <div class="post-readtime">
+                    <span class="readtime-num">{{ str_pad((string) $post->reading_time, 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="readtime-label">min read</span>
+                </div>
 
-        </article>
+            </article>
 
+        @empty
 
-        <!-- POST 02 -->
-        <article class="post-card">
+            <article class="post-card">
+                <div class="post-info">
+                    <h2 class="post-title">No articles found</h2>
+                    <p class="post-excerpt">
+                        @if ($search !== '' || $activeCategory !== '')
+                            Nothing matches your filters.
+                            <a href="{{ route('blog.index') }}" class="post-link">&gt; clear filters</a>
+                        @else
+                            No articles have been published yet.
+                        @endif
+                    </p>
+                </div>
+            </article>
 
-            <div class="post-thumb">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&h=200&fit=crop" alt="PHP Plugin">
-            </div>
-
-            <div class="post-info">
-
-                <p class="post-meta">
-                    May 18, 2024 &nbsp;&bull;&nbsp; PHP
-                </p>
-
-                <h2 class="post-title">
-                    Custom WordPress Plugin Development
-                    from Scratch
-                </h2>
-
-                <p class="post-excerpt">
-                    A complete guide to building your own WordPress plugin
-                    step by step.
-                </p>
-
-                <a href="{{ route('blog.show', 'how-to-build-a-fast-wordpress-website-in-2024') }}" class="post-link">
-                    &gt; read more
-                </a>
-
-            </div>
-
-            <div class="post-readtime">
-                <span class="readtime-num">12</span>
-                <span class="readtime-label">min read</span>
-            </div>
-
-        </article>
-
-
-        <!-- POST 03 -->
-        <article class="post-card">
-
-            <div class="post-thumb">
-                <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=300&h=200&fit=crop" alt="Django">
-            </div>
-
-            <div class="post-info">
-
-                <p class="post-meta">
-                    May 10, 2024 &nbsp;&bull;&nbsp; Python / Django
-                </p>
-
-                <h2 class="post-title">
-                    Getting Started with Django 5.0
-                </h2>
-
-                <p class="post-excerpt">
-                    Setup your Django project and build your first app
-                    with the newest version.
-                </p>
-
-                <a href="{{ route('blog.show', 'how-to-build-a-fast-wordpress-website-in-2024') }}" class="post-link">
-                    &gt; read more
-                </a>
-
-            </div>
-
-            <div class="post-readtime">
-                <span class="readtime-num">10</span>
-                <span class="readtime-label">min read</span>
-            </div>
-
-        </article>
-
-
-        <!-- POST 04 -->
-        <article class="post-card">
-
-            <div class="post-thumb">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=200&fit=crop" alt="SEO">
-            </div>
-
-            <div class="post-info">
-
-                <p class="post-meta">
-                    May 02, 2024 &nbsp;&bull;&nbsp; SEO &amp; Performance
-                </p>
-
-                <h2 class="post-title">
-                    10 Advanced SEO Techniques for 2024
-                </h2>
-
-                <p class="post-excerpt">
-                    Improve your website ranking with these advanced
-                    SEO strategies.
-                </p>
-
-                <a href="{{ route('blog.show', 'how-to-build-a-fast-wordpress-website-in-2024') }}" class="post-link">
-                    &gt; read more
-                </a>
-
-            </div>
-
-            <div class="post-readtime">
-                <span class="readtime-num">07</span>
-                <span class="readtime-label">min read</span>
-            </div>
-
-        </article>
-
+        @endforelse
 
     </div>
 
@@ -264,22 +182,57 @@
          PAGINATION
     ================================================== -->
 
-    <div class="pagination">
+    @if ($posts->hasPages())
+        @php
+            $current = $posts->currentPage();
+            $last = $posts->lastPage();
+            $from = max(1, $current - 2);
+            $to = min($last, $current + 2);
+        @endphp
 
-        <button class="page-btn" disabled>&lt;</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">&gt;</button>
+        <nav class="pagination" aria-label="Pagination">
 
-    </div>
+            @if ($posts->onFirstPage())
+                <button class="page-btn" disabled>&lt;</button>
+            @else
+                <a class="page-btn" href="{{ $posts->previousPageUrl() }}" rel="prev">&lt;</a>
+            @endif
+
+            @if ($from > 1)
+                <a class="page-btn" href="{{ $posts->url(1) }}">1</a>
+                @if ($from > 2)
+                    <span class="page-btn" aria-hidden="true">…</span>
+                @endif
+            @endif
+
+            @for ($page = $from; $page <= $to; $page++)
+                @if ($page === $current)
+                    <span class="page-btn active" aria-current="page">{{ $page }}</span>
+                @else
+                    <a class="page-btn" href="{{ $posts->url($page) }}">{{ $page }}</a>
+                @endif
+            @endfor
+
+            @if ($to < $last)
+                @if ($to < $last - 1)
+                    <span class="page-btn" aria-hidden="true">…</span>
+                @endif
+                <a class="page-btn" href="{{ $posts->url($last) }}">{{ $last }}</a>
+            @endif
+
+            @if ($posts->hasMorePages())
+                <a class="page-btn" href="{{ $posts->nextPageUrl() }}" rel="next">&gt;</a>
+            @else
+                <button class="page-btn" disabled>&gt;</button>
+            @endif
+
+        </nav>
+    @endif
 
 @include('partials.footer')
 
 @endsection
 
 @push('scripts')
-    
-
     <script src="{{ asset('assets/js/archive-blog.js') }}"></script>
 @endpush

@@ -14,6 +14,33 @@
 
 @section('content')
 
+@php
+    $galleryUrls = collect($project->gallery ?? [])
+        ->filter()
+        ->map(fn ($path) => \Illuminate\Support\Facades\Storage::disk('public')->url($path))
+        ->values();
+
+    $mainImageUrl = $project->featured_image
+        ? \Illuminate\Support\Facades\Storage::disk('public')->url($project->featured_image)
+        : ($galleryUrls->first() ?: asset('assets/images/pixel-img.png'));
+
+    $highlights = \App\Models\PortfolioProject::lines($project->highlights);
+    $features = \App\Models\PortfolioProject::lines($project->features);
+    $techLevels = collect($project->tech_levels ?? []);
+    $technologies = collect($project->technologies ?? []);
+
+    $tabs = collect([
+        'details' => ['DETAILS', \App\Models\PortfolioProject::paragraphs($project->details), $features],
+        'challenges' => ['CHALLENGES', \App\Models\PortfolioProject::paragraphs($project->challenges), []],
+        'solutions' => ['SOLUTIONS', \App\Models\PortfolioProject::paragraphs($project->solutions), []],
+        'results' => ['RESULTS', \App\Models\PortfolioProject::paragraphs($project->results), []],
+    ])->filter(fn ($tab) => count($tab[1]) || count($tab[2]));
+
+    $siteHost = $project->project_url
+        ? (parse_url($project->project_url, PHP_URL_HOST) ?: $project->project_url)
+        : null;
+@endphp
+
 <!-- =====================================================
      BACK LINK
 ===================================================== -->
@@ -44,8 +71,8 @@
                         {{ $project->title }}
                     </h1>
 
-                    @if ($project->slug === 'iprocul')
-                        <span class="sp-subtitle">خبری / فروشگاهی</span>
+                    @if ($project->project_type)
+                        <span class="sp-subtitle">{{ $project->project_type }}</span>
                     @endif
 
                     @if ($project->excerpt)
@@ -101,12 +128,12 @@
                         <span class="sp-btn-arrow">↗</span>
                     </a>
 
-                    {{-- دکمه دوم: پرونده پروژه (فعلاً بدون لینک) --}}
+                    {{-- دکمه دوم: پرونده پروژه (فقط اگر لینک ثبت شده باشد) --}}
+                    @if ($project->case_study_url)
                     <a
-                        href="#"
+                        href="{{ $project->case_study_url }}"
+                        target="_blank" rel="noopener noreferrer"
                         class="sp-btn sp-btn-secondary"
-                        onclick="return false;"
-                        aria-disabled="true"
                     >
                         <span class="sp-btn-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24"
@@ -121,6 +148,7 @@
                         <span class="sp-btn-text">CASE STUDY (PDF)</span>
                         <span class="sp-btn-arrow">↗</span>
                     </a>
+                    @endif
 
                     {{-- دکمه سوم: مخزن کد پروژه --}}
                     <a
@@ -160,41 +188,31 @@
                         </div>
                         <div class="sp-browser-url">
                             <svg class="sp-lock-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            <span>{{ $project->project_url ? (parse_url($project->project_url, PHP_URL_HOST) ?: $project->project_url) : $project->slug }}</span>
+                            <span>{{ $siteHost ?: $project->slug }}</span>
                         </div>
                     </div>
                     <div class="sp-browser-image">
                         <img
-                            src="{{ $project->featured_image
-                                ? \Illuminate\Support\Facades\Storage::disk('public')->url($project->featured_image)
-                                : asset('assets/images/pixel-img.png') }}"
+                            src="{{ $mainImageUrl }}"
                             alt="{{ $project->title }} — Preview"
                         >
                     </div>
                 </div>
 
                 <!-- Thumbnail Gallery -->
-                <div class="sp-gallery">
-                    <button class="sp-gallery-arrow sp-gallery-prev" aria-label="Previous">‹</button>
-                    <div class="sp-gallery-track">
-                        <div class="sp-gallery-item active">
-                            <img src="{{ asset('assets/images/iprocul1.jpg') }}" alt="Thumbnail 1">
+                @if ($galleryUrls->count() > 0)
+                    <div class="sp-gallery">
+                        <button class="sp-gallery-arrow sp-gallery-prev" aria-label="Previous">‹</button>
+                        <div class="sp-gallery-track">
+                            @foreach ($galleryUrls as $url)
+                                <div class="sp-gallery-item {{ $loop->first ? 'active' : '' }}">
+                                    <img src="{{ $url }}" alt="{{ $project->title }} — {{ $loop->iteration }}" loading="lazy">
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="sp-gallery-item">
-                            <img src="{{ asset('assets/images/iprocul2.jpg') }}" alt="Thumbnail 2">
-                        </div>
-                        <div class="sp-gallery-item">
-                            <img src="{{ asset('assets/images/iprocul3.jpg') }}" alt="Thumbnail 3">
-                        </div>
-                        <div class="sp-gallery-item">
-                            <img src="{{ asset('assets/images/iprocul4.jpg') }}" alt="Thumbnail 4">
-                        </div>
-                        <div class="sp-gallery-item">
-                            <img src="{{ asset('assets/images/iprocul5.jpg') }}" alt="Thumbnail 5">
-                        </div>
+                        <button class="sp-gallery-arrow sp-gallery-next" aria-label="Next">›</button>
                     </div>
-                    <button class="sp-gallery-arrow sp-gallery-next" aria-label="Next">›</button>
-                </div>
+                @endif
 
             </div>
 
@@ -208,45 +226,53 @@
                 <div class="sp-info-card">
                     <h3 class="sp-card-title">Project Info</h3>
 
+                    @if ($project->client)
                     <div class="sp-info-row">
                         <div class="sp-info-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </div>
                         <div class="sp-info-content">
                             <span class="sp-info-label">Client</span>
-                            <span class="sp-info-value">دانشگاه کشاورزی تهران</span>
+                            <span class="sp-info-value">{{ $project->client }}</span>
                         </div>
                     </div>
+                    @endif
 
+                    @if ($project->project_type)
                     <div class="sp-info-row">
                         <div class="sp-info-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                         </div>
                         <div class="sp-info-content">
                             <span class="sp-info-label">Category</span>
-                            <span class="sp-info-value">خبری / فروشگاهی</span>
+                            <span class="sp-info-value">{{ $project->project_type }}</span>
                         </div>
                     </div>
+                    @endif
 
+                    @if ($project->project_date)
                     <div class="sp-info-row">
                         <div class="sp-info-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         </div>
                         <div class="sp-info-content">
                             <span class="sp-info-label">Date</span>
-                            <span class="sp-info-value">1403 / 2024</span>
+                            <span class="sp-info-value">{{ $project->project_date }}</span>
                         </div>
                     </div>
+                    @endif
 
+                    @if ($siteHost)
                     <div class="sp-info-row">
                         <div class="sp-info-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                         </div>
                         <div class="sp-info-content">
                             <span class="sp-info-label">Website</span>
-                            <span class="sp-info-value">iprocul.ir</span>
+                            <span class="sp-info-value">{{ $siteHost }}</span>
                         </div>
                     </div>
+                    @endif
 
                     <div class="sp-info-row">
                         <div class="sp-info-icon">
@@ -256,42 +282,26 @@
                             <span class="sp-info-label">Status</span>
                             <span class="sp-info-value sp-status-live">
                                 <span class="sp-status-dot"></span>
-                                LIVE
+                                {{ $project->project_url ? 'LIVE' : 'CASE STUDY' }}
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Highlights Card -->
-                <div class="sp-highlights-card">
-                    <h3 class="sp-card-title">Highlights</h3>
-                    <ul class="sp-highlights-list">
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            آنالیز و دیباگ کامل از صفر تا صد
-                        </li>
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            طراحی پیاده‌سازی شده توسط دکتر دلشاد
-                        </li>
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            درگاه پرداخت آنلاین
-                        </li>
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            مجوزهای لازم برای فعالیت سایت
-                        </li>
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            بخش خبری و فروشگاهی (WooCommerce)
-                        </li>
-                        <li>
-                            <span class="sp-highlight-bullet">◉</span>
-                            ریسپانسیو و بهینه‌سازی شده
-                        </li>
-                    </ul>
-                </div>
+                @if (count($highlights))
+                    <!-- Highlights Card -->
+                    <div class="sp-highlights-card">
+                        <h3 class="sp-card-title">Highlights</h3>
+                        <ul class="sp-highlights-list">
+                            @foreach ($highlights as $highlight)
+                                <li>
+                                    <span class="sp-highlight-bullet">◉</span>
+                                    {{ $highlight }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
             </div>
 
@@ -303,148 +313,72 @@
         ====================================================== -->
         <div class="sp-bottom">
 
+            @if ($tabs->isNotEmpty())
             <!-- Tabs Section -->
             <div class="sp-tabs-section">
                 <div class="sp-tab-nav">
-                    <button class="sp-tab active" data-tab="details">DETAILS</button>
-                    <button class="sp-tab" data-tab="challenges">CHALLENGES</button>
-                    <button class="sp-tab" data-tab="solutions">SOLUTIONS</button>
-                    <button class="sp-tab" data-tab="results">RESULTS</button>
+                    @foreach ($tabs as $key => $tab)
+                        <button class="sp-tab {{ $loop->first ? 'active' : '' }}" data-tab="{{ $key }}">{{ $tab[0] }}</button>
+                    @endforeach
                 </div>
 
-                <div class="sp-tab-content" id="details">
-                    <p>
-                        این پروژه به صورت کامل از صفر تا صد توسط شخص خودم
-                        آنالیز، دیباگ و طراحی شد. طرح انجام شده توسط
-                        دکتر مجتبی دلشاد ارائه و توسط بنده پیاده‌سازی شد.
-                    </p>
-                    <ul class="sp-details-list">
-                        <li>طراحی و پیاده‌سازی کامل قالب WordPress</li>
-                        <li>بخش خبری با سیستم مدیریت محتوا</li>
-                        <li>فروشگاه آنلاین با WooCommerce</li>
-                        <li>درگاه پرداخت آنلاین</li>
-                        <li>اخذ تمام مجوزهای لازم برای فعالیت</li>
-                        <li>بهینه‌سازی عملکرد و سرعت سایت</li>
-                    </ul>
-                </div>
+                @foreach ($tabs as $key => $tab)
+                    <div class="sp-tab-content" id="{{ $key }}" @unless ($loop->first) style="display:none;" @endunless>
+                        @foreach ($tab[1] as $paragraph)
+                            <p>{{ $paragraph }}</p>
+                        @endforeach
 
-                <div class="sp-tab-content" id="challenges" style="display:none;">
-                    <p>
-                        بزرگترین چالش این پروژه پیاده‌سازی دقیق طرح ارائه
-                        شده توسط دکتر دلشاد بود که شامل بخش‌های مختلف
-                        خبری، فروشگاهی و اطلاع‌رسانی بود. تمام قسمت‌های
-                        مهم سایت باید در یک بخش حدوداً 700 پیکسلی
-                        پیاده‌سازی و نمایش داده می‌شد.
-                    </p>
-                </div>
-
-                <div class="sp-tab-content" id="solutions" style="display:none;">
-                    <p>
-                        تمام سناریوهای مهم در سایت برای آنلاین کردن و
-                        لحاظ کردن قابلیت‌ها به طور کامل توسط بنده
-                        ایده‌دهی و انجام شد. درگاه پرداخت، مجوزهای
-                        لازم و سیستم فروشگاهی همگی از صفر پیاده‌سازی شدند.
-                    </p>
-                </div>
-
-                <div class="sp-tab-content" id="results" style="display:none;">
-                    <p>
-                        پروژه هم اکنون به صورت آنلاین درحال فعالیت هست
-                        و تمام بخش‌های مورد نیاز از جمله بخش خبری،
-                        فروشگاهی، درگاه پرداخت و مجوزها فعال هستند.
-                    </p>
-                </div>
+                        @if (count($tab[2]))
+                            <ul class="sp-details-list">
+                                @foreach ($tab[2] as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                @endforeach
             </div>
+            @endif
 
+            @if ($technologies->isNotEmpty())
             <!-- Tech Stack Section -->
             <div class="sp-tech-section">
                 <h3 class="sp-section-title">Tech Stack</h3>
 
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M3 12h18"/></svg>
+                @foreach ($technologies as $tech)
+                    @php
+                        $level = $techLevels->get($tech);
+                        $level = is_numeric($level) ? max(0, min(100, (int) $level)) : null;
+                    @endphp
+                    <div class="sp-tech-item">
+                        <div class="sp-tech-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M3 12h18"/></svg>
+                        </div>
+                        <span class="sp-tech-name">{{ $tech }}</span>
+                        @if ($level !== null)
+                            <div class="sp-tech-bar">
+                                <div class="sp-tech-bar-fill" style="--progress: {{ $level }}%;"></div>
+                            </div>
+                            <span class="sp-tech-percent">{{ $level }}%</span>
+                        @endif
                     </div>
-                    <span class="sp-tech-name">WordPress</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 95%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">95%</span>
-                </div>
-
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </div>
-                    <span class="sp-tech-name">WooCommerce</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 90%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">90%</span>
-                </div>
-
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </div>
-                    <span class="sp-tech-name">PHP</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 85%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">85%</span>
-                </div>
-
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h4"/></svg>
-                    </div>
-                    <span class="sp-tech-name">JavaScript</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 70%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">70%</span>
-                </div>
-
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></svg>
-                    </div>
-                    <span class="sp-tech-name">HTML5</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 90%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">90%</span>
-                </div>
-
-                <div class="sp-tech-item">
-                    <div class="sp-tech-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>
-                    </div>
-                    <span class="sp-tech-name">CSS3</span>
-                    <div class="sp-tech-bar">
-                        <div class="sp-tech-bar-fill" style="--progress: 85%;"></div>
-                    </div>
-                    <span class="sp-tech-percent">85%</span>
-                </div>
+                @endforeach
             </div>
+            @endif
 
+            @if ($galleryUrls->count() > 0)
             <!-- Gallery Section -->
             <div class="sp-gallery-section">
                 <h3 class="sp-section-title">Gallery</h3>
                 <div class="sp-gallery-grid">
-                    <div class="sp-gallery-thumb active">
-                        <img src="{{ asset('assets/images/pixel-img.png') }}" alt="Gallery 1">
-                    </div>
-                    <div class="sp-gallery-thumb">
-                        <img src="{{ asset('assets/images/pixel-img.png') }}" alt="Gallery 2">
-                    </div>
-                    <div class="sp-gallery-thumb">
-                        <img src="{{ asset('assets/images/pixel-img.png') }}" alt="Gallery 3">
-                    </div>
-                    <div class="sp-gallery-thumb">
-                        <img src="{{ asset('assets/images/pixel-img.png') }}" alt="Gallery 4">
-                    </div>
+                    @foreach ($galleryUrls as $url)
+                        <div class="sp-gallery-thumb {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ $url }}" alt="{{ $project->title }} — Gallery {{ $loop->iteration }}" loading="lazy">
+                        </div>
+                    @endforeach
                 </div>
             </div>
+            @endif
 
         </div>
 

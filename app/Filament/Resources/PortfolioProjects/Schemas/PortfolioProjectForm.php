@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PortfolioProjects\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -61,12 +62,82 @@ class PortfolioProjectForm
                     ->maxLength(255)
                     ->placeholder('https://github.com/username/project'),
 
+                TextInput::make('client')
+                    ->label('کارفرما')
+                    ->maxLength(255),
+
+                TextInput::make('project_type')
+                    ->label('نوع پروژه')
+                    ->helperText('مثلاً: خبری / فروشگاهی')
+                    ->maxLength(255),
+
+                TextInput::make('project_date')
+                    ->label('تاریخ انجام پروژه')
+                    ->helperText('متن آزاد؛ مثلاً: 1403 / 2024')
+                    ->maxLength(255),
+
+                TextInput::make('case_study_url')
+                    ->label('لینک پرونده پروژه (PDF)')
+                    ->url()
+                    ->maxLength(255)
+                    ->helperText('اگر خالی بماند دکمه پرونده پروژه نمایش داده نمی‌شود.'),
+
+                Textarea::make('highlights')
+                    ->label('نکات برجسته (Highlights)')
+                    ->rows(5)
+                    ->helperText('هر خط یک مورد.')
+                    ->columnSpanFull(),
+
+                Textarea::make('details')
+                    ->label('تب DETAILS — توضیحات')
+                    ->rows(4)
+                    ->helperText('برای پاراگراف جدید یک خط خالی بگذار.')
+                    ->columnSpanFull(),
+
+                Textarea::make('features')
+                    ->label('تب DETAILS — لیست قابلیت‌ها')
+                    ->rows(5)
+                    ->helperText('هر خط یک مورد.')
+                    ->columnSpanFull(),
+
+                Textarea::make('challenges')
+                    ->label('تب CHALLENGES — چالش‌ها')
+                    ->rows(4)
+                    ->columnSpanFull(),
+
+                Textarea::make('solutions')
+                    ->label('تب SOLUTIONS — راه‌حل‌ها')
+                    ->rows(4)
+                    ->columnSpanFull(),
+
+                Textarea::make('results')
+                    ->label('تب RESULTS — نتایج')
+                    ->rows(4)
+                    ->columnSpanFull(),
+
                 TagsInput::make('technologies')
                     ->label('تکنولوژی‌های استفاده‌شده')
                     ->placeholder('مثلاً Laravel')
                     ->helperText(
                         'هر تکنولوژی را وارد کن و با Enter ثبت کن.'
                     )
+                    ->columnSpanFull(),
+
+                KeyValue::make('tech_levels')
+                    ->label('درصد تسلط روی هر تکنولوژی (اختیاری)')
+                    ->keyLabel('نام تکنولوژی (دقیقاً مثل بالا)')
+                    ->valueLabel('درصد (عدد 0 تا 100)')
+                    ->helperText('فقط برای تکنولوژی‌هایی که اینجا بنویسی نوار درصد نمایش داده می‌شود.')
+                    ->columnSpanFull(),
+
+                FileUpload::make('gallery')
+                    ->label('گالری تصاویر')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->disk('public')
+                    ->directory('portfolio-gallery')
+                    ->visibility('public')
                     ->columnSpanFull(),
 
                 Select::make('status')
